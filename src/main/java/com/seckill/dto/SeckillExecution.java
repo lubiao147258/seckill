@@ -32,7 +32,15 @@ public class SeckillExecution {
         this.stateInfo = seckillStatEnum.getStateInfo();
     }
 
-
+    @Override
+    public String toString() {
+        return "SeckillExecution{" +
+                "seckillId=" + seckillId +
+                ", state=" + state +
+                ", stateInfo='" + stateInfo + '\'' +
+                ", successKilled=" + successKilled +
+                '}';
+    }
 
     public long getSeckillId() {
         return seckillId;

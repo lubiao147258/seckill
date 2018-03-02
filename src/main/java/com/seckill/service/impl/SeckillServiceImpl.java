@@ -33,7 +33,7 @@ public class SeckillServiceImpl implements SeckillService{
     private SuccessKilledDao successKilledDao;
 
     //用于混淆MD5
-    private final String slat = "gg^*&678GgG9-9BUBBY,,/.,123";
+    private final String slat = "gg^*&678GgG9-9123";
 
     @Override
     public List<Seckill> getSeckillList() {
@@ -58,7 +58,7 @@ public class SeckillServiceImpl implements SeckillService{
         if(nowTime.getTime() < startTime.getTime()
                 || nowTime.getTime() > endTime.getTime()){
             return new Exposer(false,seckillId,nowTime.getTime(),
-                    startTime.getTime(),endTime.getTime());
+            startTime.getTime(),endTime.getTime());
         }
         //转化特定字符串的过程，不可逆
         String md5 = getMD5(seckillId);
@@ -76,7 +76,7 @@ public class SeckillServiceImpl implements SeckillService{
     *
     * */
     public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) throws SeckillException, RepeatKillException, SeckillCloseException {
-        if(md5 == null || md5.equals(getMD5(seckillId))){
+        if(md5 == null || !md5.equals(getMD5(seckillId))){
             throw new SeckillException("seckill data rewrite");
         }
         //执行秒杀逻辑：减库存 + 记录购买行为
