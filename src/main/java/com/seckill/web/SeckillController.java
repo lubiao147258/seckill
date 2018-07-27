@@ -14,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
 
 @Controller
@@ -87,5 +90,40 @@ public class SeckillController {
             //result = new SeckillResult<SeckillExecution>(false, e.getMessage());
         }
         return null;
+    }
+
+
+    @RequestMapping(value = "/downloadFile")
+    public void download(HttpServletRequest request , HttpServletResponse response , String path, String fileName) throws Exception{
+        downloadTemplate(request,response, path , fileName);
+    }
+
+    private void downloadTemplate(HttpServletRequest request,HttpServletResponse response,String rootPath, String fileName) throws IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        java.io.BufferedInputStream bis = null;
+        java.io.BufferedOutputStream bos = null;
+        String excelPath = request.getServletContext().getRealPath("/") + rootPath;
+        try {
+            long fileLength = new File(excelPath).length();
+            response.setContentType("application/x-msdownload;");
+            response.setHeader("Content-disposition", "attachment; filename="
+                    + new String(fileName.getBytes("GBK"), "iso-8859-1"));
+            response.setHeader("Content-Length", String.valueOf(fileLength));
+            bis = new BufferedInputStream(new FileInputStream(excelPath));
+            bos = new BufferedOutputStream(response.getOutputStream());
+            byte[] buff = new byte[2048];
+            int bytesRead;
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null)
+                bis.close();
+            if (bos != null)
+                bos.close();
+        }
     }
 }
