@@ -1,6 +1,13 @@
 package com.AlgorithmsAndDataStructures.BinarySearchTree;
 
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 /**
  * 二分搜索树
  * @author lubiao
@@ -453,6 +460,63 @@ public class BinarySearchTree {
         //否则返回当前节点.
         return node;
 
+    }
+
+    /**
+     * 层序遍历
+     */
+    public void levelOrder() {
+        Queue<Node> q = new LinkedList<Node>();
+        q.add(mRoot);
+        while(!(q.size() == 0)){
+            Node node = q.poll();
+            System.out.print(node.getKey() + " ");
+
+            if(!(node.getLeftChild() == null)){
+                q.add(node.getLeftChild());
+            }
+            if(!(node.getRightChild() == null)){
+                q.add(node.getRightChild());
+            }
+        }
+    }
+
+
+    public void removeAny(int key){
+         mRoot = removeAny(mRoot, key);
+    }
+
+
+    private Node removeAny(Node node , int key){
+        if(node == null){
+            return null;
+        }
+        if(key < node.getKey()){
+            Node left = removeAny(node.getLeftChild(),key);
+            return left;
+        }else if(key > node.getKey()){
+            Node right = removeAny(node.getRightChild(), key);
+            return right;
+        }else {// key == node.getkey();
+            if (node.getLeftChild() == null) {
+                Node right = node.getRightChild();
+                node = null;
+                mCount--;
+                return right;
+            }
+            if(node.getRightChild() == null) {
+                Node left = node.getLeftChild();
+                node = null;
+                mCount--;
+                return left;
+            }
+            //左右节点都不为空的情况
+            Node min = getMinmum(node.getRightChild());
+            min.setLeftChild(node.getLeftChild());
+            min.setRightChild(removeMin(node.getRightChild()));
+            node = null;
+            return min;
+        }
     }
 
 }
