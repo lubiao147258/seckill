@@ -28,6 +28,17 @@ public class SeckillController {
     @Autowired
     private SeckillService seckillService;
 
+
+    @RequestMapping("/index")
+    public String index(){
+        return "index";
+    }
+
+    @RequestMapping({"/main","/",""})
+    public String main(){
+        return "main";
+    }
+
     @RequestMapping(name = "/list",method = RequestMethod.GET)
     public String list(Model model){//list.jsp + model = ModelAndView
         //获取列表页
